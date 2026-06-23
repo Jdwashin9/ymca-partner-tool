@@ -75,7 +75,7 @@ node server.js
 
 Visit `http://localhost:3000` in your browser.
 
-> ⚠️ **Security note:** Never commit your `.env` file. It is listed in `.gitignore` and will not be pushed to GitHub.
+ **Security note:** Never commit your `.env` file. It is listed in `.gitignore` and will not be pushed to GitHub.
 
 ---
 
