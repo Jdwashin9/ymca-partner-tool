@@ -49,11 +49,11 @@ Save researched organizations to a running catalog with their type, recommended 
 
  Running Locally
 
-### Prerequisites
+Prerequisites
 - [Node.js](https://nodejs.org/) (v18 or higher)
 - An [Anthropic API key](https://console.anthropic.com/)
 
-### Setup
+Setup
 
 **1. Clone the repository**
 ```bash
@@ -79,7 +79,7 @@ Visit `http://localhost:3000` in your browser.
 
 ---
 
-## 💡 How It Works
+How It Works
 
 The app uses a local Node.js proxy server (`server.js`) to forward requests to the Anthropic API. This pattern is necessary because browsers block direct API calls for security reasons (CORS policy). The proxy:
 
@@ -92,7 +92,7 @@ This is the standard professional pattern for building web apps that call third-
 
 ---
 
-## 🔗 Relevance to Claude Corps
+Relevance to Claude Corps
 
 This project directly reflects the kind of work a Claude Corps Fellow would do embedded at the YMCA of Greater Charlotte:
 
@@ -103,7 +103,7 @@ This project directly reflects the kind of work a Claude Corps Fellow would do e
 
 ---
 
-## 👤 About the Developer
+About the Developer
 
 **Joshua D. Washington**
 B.S. Information Systems, Carnegie Mellon University, May 2026
