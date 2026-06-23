@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>YMCA of Greater Charlotte — Partner Outreach Suite</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.9.0/dist/tabler-icons.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --color-bg: #ffffff;
+      --color-bg-secondary: #f8f9fa;
+      --color-border: #e5e7eb;
+      --color-border-light: #f3f4f6;
+      --color-text-primary: #111827;
+      --color-text-secondary: #6b7280;
+      --color-text-tertiary: #9ca3af;
+      --color-accent: #005EB8;
+      --color-accent-light: #eff6ff;
+      --color-success: #059669;
+      --color-success-bg: #ecfdf5;
+      --color-warning: #d97706;
+      --color-warning-bg: #fffbeb;
+      --color-danger: #dc2626;
+      --color-danger-bg: #fef2f2;
+      --radius: 10px;
+      --radius-sm: 6px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #f3f4f6; min-height: 100vh; padding: 2rem 1rem; color: var(--color-text-primary); }
+    .container { max-width: 700px; margin: 0 auto; }
+    .header { background: var(--color-accent); color: white; border-radius: var(--radius); padding: 1.5rem; margin-bottom: 1.5rem; box-shadow: var(--shadow); }
+    .header h1 { font-size: 20px; font-weight: 600; margin-bottom: 4px; }
+    .header p { font-size: 14px; opacity: 0.85; }
+    .card { background: var(--color-bg); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; margin-bottom: 1.5rem; }
+    .tabs { display: flex; border-bottom: 1px solid var(--color-border); background: var(--color-bg-secondary); }
+    .tab { flex: 1; padding: 12px; font-size: 14px; font-weight: 500; cursor: pointer; border: none; background: none; color: var(--color-text-secondary); border-bottom: 2px solid transparent; transition: all 0.15s; }
+    .tab:hover { color: var(--color-text-primary); }
+    .tab.active { color: var(--color-accent); border-bottom-color: var(--color-accent); background: var(--color-bg); }
+    .tab-panel { display: none; padding: 1.5rem; }
+    .tab-panel.active { display: block; }
+    .field-group { margin-bottom: 1rem; }
+    label { display: block; font-size: 13px; font-weight: 500; color: var(--color-text-secondary); margin-bottom: 5px; }
+    input[type="text"], select, textarea {
+      width: 100%; padding: 9px 12px; border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm); font-size: 14px; color: var(--color-text-primary);
+      background: var(--color-bg); transition: border-color 0.15s; outline: none;
+    }
+    input[type="text"]:focus, select:focus, textarea:focus { border-color: var(--color-accent); box-shadow: 0 0 0 3px rgba(0,94,184,0.08); }
+    textarea { min-height: 80px; resize: vertical; }
+    .input-row { display: flex; gap: 8px; }
+    .input-row input { flex: 1; }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: var(--radius-sm); font-size: 14px; font-weight: 500; cursor: pointer; border: none; transition: all 0.15s; }
+    .btn-primary { background: var(--color-accent); color: white; }
+    .btn-primary:hover { background: #004fa3; }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-secondary { background: var(--color-bg-secondary); color: var(--color-text-primary); border: 1px solid var(--color-border); }
+    .btn-secondary:hover { background: var(--color-border-light); }
+    .btn-full { width: 100%; justify-content: center; }
+    .result-card { border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.25rem; margin-top: 1rem; }
+    .result-title { font-size: 16px; font-weight: 600; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .result-type { font-size: 12px; color: var(--color-text-tertiary); margin-bottom: 12px; }
+    .section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-tertiary); margin: 12px 0 4px; }
+    .section-text { font-size: 14px; color: var(--color-text-secondary); line-height: 1.6; }
+    .tag { display: inline-block; font-size: 12px; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--color-border); color: var(--color-text-secondary); margin: 2px; }
+    .badge { font-size: 11px; padding: 2px 8px; border-radius: 999px; font-weight: 500; }
+    .badge-strong { background: var(--color-success-bg); color: var(--color-success); }
+    .badge-moderate { background: var(--color-warning-bg); color: var(--color-warning); }
+    .badge-exploratory { background: var(--color-bg-secondary); color: var(--color-text-secondary); }
+    .action-row { display: flex; gap: 8px; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--color-border-light); flex-wrap: wrap; }
+    .email-subject { font-size: 13px; color: var(--color-text-tertiary); margin-bottom: 8px; }
+    .email-subject strong { color: var(--color-text-primary); }
+    .email-body { font-size: 14px; color: var(--color-text-secondary); line-height: 1.75; white-space: pre-wrap; padding-top: 12px; border-top: 1px solid var(--color-border-light); }
+    .catalog-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--color-border-light); }
+    .catalog-item:last-child { border-bottom: none; }
+    .catalog-empty { text-align: center; padding: 2rem; color: var(--color-text-tertiary); font-size: 14px; }
+    .catalog-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+    .catalog-header h2 { font-size: 15px; font-weight: 600; }
+    .loading { display: none; align-items: center; gap: 8px; padding: 1rem 0; font-size: 14px; color: var(--color-text-secondary); }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-accent); animation: pulse 1.2s ease-in-out infinite; }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes pulse { 0%,80%,100%{opacity:.2} 40%{opacity:1} }
+    .error { font-size: 13px; color: var(--color-danger); background: var(--color-danger-bg); padding: 10px 14px; border-radius: var(--radius-sm); margin-top: 10px; display: none; }
+    .success-msg { font-size: 12px; color: var(--color-success); display: none; align-items: center; gap: 4px; }
+    .count-pill { font-size: 11px; padding: 1px 7px; border-radius: 999px; background: var(--color-accent); color: white; margin-left: 6px; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1><i class="ti ti-building-community"></i> Partner Outreach Suite</h1>
+    <p>YMCA of Greater Charlotte &nbsp;·&nbsp; Powered by Claude AI</p>
+  </div>
+
+  <div class="card">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('research')"><i class="ti ti-search"></i> Research</button>
+      <button class="tab" onclick="switchTab('email')"><i class="ti ti-mail"></i> Draft Email</button>
+      <button class="tab" onclick="switchTab('catalog')"><i class="ti ti-list"></i> Catalog <span class="count-pill" id="tabCount">0</span></button>
+    </div>
+
+    <!-- RESEARCH TAB -->
+    <div class="tab-panel active" id="panel-research">
+      <div class="field-group">
+        <label for="orgInput">Organization name</label>
+        <div class="input-row">
+          <input type="text" id="orgInput" placeholder="e.g. Second Harvest Food Bank of Metrolina" />
+          <button class="btn btn-primary" id="researchBtn" onclick="runResearch()"><i class="ti ti-search"></i> Research</button>
+        </div>
+      </div>
+      <div class="loading" id="loadingResearch"><div class="dot"></div><div class="dot"></div><div class="dot"></div> Researching organization...</div>
+      <div class="error" id="errorResearch"></div>
+      <div id="resultArea"></div>
+    </div>
+
+    <!-- EMAIL TAB -->
+    <div class="tab-panel" id="panel-email">
+      <div class="field-group">
+        <label for="emailOrgName">Organization name</label>
+        <input type="text" id="emailOrgName" placeholder="e.g. Charlotte Family Housing" />
+      </div>
+      <div class="field-group">
+        <label for="emailOrgType">Organization type</label>
+        <select id="emailOrgType">
+          <option value="">Select type...</option>
+          <option>Food bank / hunger relief</option>
+          <option>Housing / shelter nonprofit</option>
+          <option>Youth education nonprofit</option>
+          <option>Faith community / church</option>
+          <option>Healthcare / wellness org</option>
+          <option>Immigrant & refugee services</option>
+          <option>Corporate / business sponsor</option>
+          <option>Government / public agency</option>
+          <option>Other nonprofit</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label for="emailEventType">Partnership purpose</label>
+        <select id="emailEventType">
+          <option value="">Select purpose...</option>
+          <option>Community event co-sponsorship</option>
+          <option>Afterschool program referrals</option>
+          <option>Summer camp scholarships</option>
+          <option>New American Welcome Center collaboration</option>
+          <option>Healthy Kids Day participation</option>
+          <option>Corporate membership / fundraising</option>
+          <option>Volunteer program coordination</option>
+          <option>General partnership introduction</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label for="emailContact">Contact role (optional)</label>
+        <input type="text" id="emailContact" placeholder="e.g. Director of Community Partnerships" />
+      </div>
+      <div class="field-group">
+        <label for="emailNotes">Extra context (optional)</label>
+        <textarea id="emailNotes" placeholder="e.g. We met at a Charlotte Chamber event last month..."></textarea>
+      </div>
+      <button class="btn btn-primary btn-full" id="emailBtn" onclick="runEmail()"><i class="ti ti-mail"></i> Generate outreach email</button>
+      <div class="loading" id="loadingEmail" style="margin-top:1rem;"><div class="dot"></div><div class="dot"></div><div class="dot"></div> Drafting your email...</div>
+      <div class="error" id="errorEmail"></div>
+      <div id="emailResult"></div>
+    </div>
+
+    <!-- CATALOG TAB -->
+    <div class="tab-panel" id="panel-catalog">
+      <div class="catalog-header">
+        <h2>Saved Partners</h2>
+        <span class="badge badge-exploratory" id="catalogCount">0 saved</span>
+      </div>
+      <div id="catalogList">
+        <div class="catalog-empty"><i class="ti ti-bookmark" style="font-size:24px;display:block;margin-bottom:8px;"></i>No partners saved yet.<br>Research an org and click "Save to catalog".</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ─── All API calls go to our local proxy server, not Anthropic directly ───
+const API_URL = "http://localhost:3000/api";
+
+const catalog = [];
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  const panels = ['research','email','catalog'];
+  document.querySelectorAll('.tab')[panels.indexOf(name)].classList.add('active');
+  document.getElementById('panel-' + name).classList.add('active');
+}
+
+async function callClaude(prompt) {
+  // Instead of calling Anthropic directly (which causes CORS errors),
+  // we call our local server.js which forwards the request safely.
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-6",
+      max_tokens: 1000,
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+  const data = await response.json();
+  const raw = data.content.map(i => i.text || "").join("");
+  return JSON.parse(raw.replace(/```json|```/g, "").trim());
+}
+
+async function runResearch() {
+  const orgName = document.getElementById('orgInput').value.trim();
+  if (!orgName) return;
+  document.getElementById('researchBtn').disabled = true;
+  document.getElementById('loadingResearch').style.display = 'flex';
+  document.getElementById('errorResearch').style.display = 'none';
+  document.getElementById('resultArea').innerHTML = '';
+
+  const prompt = `You are helping the YMCA of Greater Charlotte identify and research potential community partners. The YMCA serves nearly 300,000 kids, families, and seniors across 14 centers in Charlotte, NC. Their strategic focus is on connection, health, well-being, and transformation. Programs include afterschool care, summer camps, early childhood education, New American Welcome Centers for immigrants, fitness, and community events.
+
+Research this organization: "${orgName}"
+
+Respond ONLY with a valid JSON object (no markdown, no backticks, no extra text):
+{
+  "name": "Official organization name",
+  "type": "Type of org",
+  "mission": "2-3 sentence summary of their mission",
+  "contactRoles": ["Job title 1", "Job title 2"],
+  "partnershipAngle": "2-3 sentences on why this org would be a strong YMCA partner, referencing specific programs",
+  "partnershipStrength": "Strong"
+}
+partnershipStrength must be exactly one of: "Strong", "Moderate", or "Exploratory"`;
+
+  try {
+    const result = await callClaude(prompt);
+    renderResult(result);
+  } catch(err) {
+    const el = document.getElementById('errorResearch');
+    el.textContent = "Something went wrong. Make sure server.js is running and try again.";
+    el.style.display = 'block';
+  }
+  document.getElementById('loadingResearch').style.display = 'none';
+  document.getElementById('researchBtn').disabled = false;
+}
+
+function renderResult(r) {
+  const badgeClass = r.partnershipStrength === 'Strong' ? 'badge-strong' : r.partnershipStrength === 'Moderate' ? 'badge-moderate' : 'badge-exploratory';
+  document.getElementById('resultArea').innerHTML = `
+    <div class="result-card">
+      <div class="result-title">
+        <i class="ti ti-building" style="color:#6b7280;"></i>
+        ${r.name}
+        <span class="badge ${badgeClass}">${r.partnershipStrength} fit</span>
+      </div>
+      <div class="result-type">${r.type}</div>
+      <div class="section-label">Mission</div>
+      <div class="section-text">${r.mission}</div>
+      <div class="section-label">Who to contact</div>
+      <div style="margin-top:4px;">${r.contactRoles.map(role => `<span class="tag">${role}</span>`).join('')}</div>
+      <div class="section-label">YMCA partnership angle</div>
+      <div class="section-text">${r.partnershipAngle}</div>
+      <div class="action-row">
+        <button class="btn btn-secondary" onclick='saveToCatalog(${JSON.stringify(r).replace(/'/g,"&#39;")})'>
+          <i class="ti ti-bookmark"></i> Save to catalog
+        </button>
+        <button class="btn btn-secondary" onclick='prefillEmail(${JSON.stringify(r).replace(/'/g,"&#39;")})'>
+          <i class="ti ti-mail"></i> Draft email
+        </button>
+      </div>
+    </div>`;
+}
+
+function prefillEmail(r) {
+  document.getElementById('emailOrgName').value = r.name;
+  document.getElementById('emailContact').value = r.contactRoles[0] || '';
+  switchTab('email');
+}
+
+async function runEmail() {
+  const orgName = document.getElementById('emailOrgName').value.trim();
+  const orgType = document.getElementById('emailOrgType').value;
+  const eventType = document.getElementById('emailEventType').value;
+  const contactRole = document.getElementById('emailContact').value.trim();
+  const notes = document.getElementById('emailNotes').value.trim();
+  if (!orgName || !orgType || !eventType) {
+    const el = document.getElementById('errorEmail');
+    el.textContent = "Please fill in the organization name, type, and partnership purpose.";
+    el.style.display = 'block';
+    return;
+  }
+  document.getElementById('emailBtn').disabled = true;
+  document.getElementById('loadingEmail').style.display = 'flex';
+  document.getElementById('errorEmail').style.display = 'none';
+  document.getElementById('emailResult').innerHTML = '';
+
+  const prompt = `You are a community partnerships coordinator at the YMCA of Greater Charlotte. The YMCA serves nearly 300,000 kids, families, and seniors across 14 centers. Strategic priorities: connection, health, well-being, and transformation. Key programs: afterschool care, summer camps (Camp Thunderbird and Camp Harrison), early childhood education, New American Welcome Centers for immigrants, fitness programs, and community events like the YMCA Corporate Cup 5K.
+
+Draft a professional, warm, concise outreach email for:
+- Organization: ${orgName}
+- Type: ${orgType}
+- Partnership purpose: ${eventType}
+- Contact role: ${contactRole || 'Community Partnerships contact'}
+${notes ? `- Additional context: ${notes}` : ''}
+
+3-4 paragraphs. Personal and mission-driven, not corporate. Reference specific YMCA programs. Close with a clear call to action (20-minute intro call). Sign from: [Your Name], Community Partnerships, YMCA of Greater Charlotte.
+
+Respond ONLY with valid JSON (no markdown, no backticks):
+{
+  "subject": "Email subject line",
+  "body": "Full email body with paragraphs separated by \\n\\n"
+}`;
+
+  try {
+    const result = await callClaude(prompt);
+    renderEmail(result);
+  } catch(err) {
+    const el = document.getElementById('errorEmail');
+    el.textContent = "Something went wrong. Make sure server.js is running and try again.";
+    el.style.display = 'block';
+  }
+  document.getElementById('loadingEmail').style.display = 'none';
+  document.getElementById('emailBtn').disabled = false;
+}
+
+function renderEmail(e) {
+  document.getElementById('emailResult').innerHTML = `
+    <div class="result-card" style="margin-top:1rem;">
+      <div class="email-subject">Subject: <strong>${e.subject}</strong></div>
+      <div class="email-body">${e.body}</div>
+      <div class="action-row">
+        <button class="btn btn-secondary" onclick="copyEmail(\`Subject: ${e.subject.replace(/`/g,'\\`')}\n\n${e.body.replace(/`/g,'\\`')}\`)">
+          <i class="ti ti-copy"></i> Copy email
+        </button>
+        <span class="success-msg" id="copiedMsg"><i class="ti ti-check"></i> Copied!</span>
+      </div>
+    </div>`;
+}
+
+function copyEmail(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    const msg = document.getElementById('copiedMsg');
+    msg.style.display = 'flex';
+    setTimeout(() => msg.style.display = 'none', 2000);
+  });
+}
+
+function saveToCatalog(org) {
+  if (catalog.find(o => o.name === org.name)) return;
+  catalog.push(org);
+  renderCatalog();
+}
+
+function renderCatalog() {
+  const count = catalog.length;
+  document.getElementById('catalogCount').textContent = count + ' saved';
+  document.getElementById('tabCount').textContent = count;
+  if (count === 0) {
+    document.getElementById('catalogList').innerHTML = '<div class="catalog-empty">No partners saved yet.</div>';
+    return;
+  }
+  document.getElementById('catalogList').innerHTML = catalog.map(o => {
+    const bc = o.partnershipStrength === 'Strong' ? 'badge-strong' : o.partnershipStrength === 'Moderate' ? 'badge-moderate' : 'badge-exploratory';
+    return `<div class="catalog-item">
+      <div>
+        <div style="font-weight:600;font-size:14px;">${o.name}</div>
+        <div style="font-size:12px;color:#6b7280;margin-top:2px;">${o.type} · Contact: ${o.contactRoles[0]}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span class="badge ${bc}">${o.partnershipStrength}</span>
+        <button class="btn btn-secondary" style="padding:5px 10px;font-size:12px;" onclick='prefillEmail(${JSON.stringify(o).replace(/'/g,"&#39;")})'>
+          <i class="ti ti-mail"></i>
+        </button>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+document.getElementById('orgInput').addEventListener('keydown', e => { if (e.key === 'Enter') runResearch(); });
+</script>
+</body>
+</html>
