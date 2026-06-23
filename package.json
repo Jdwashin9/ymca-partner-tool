@@ -1,0 +1,13 @@
+{
+  "name": "ymca-partner-tool",
+  "version": "1.0.0",
+  "description": "An AI-powered community partner research and outreach tool built for the YMCA of Greater Charlotte. This project demonstrates how Claude can help nonprofit staff identify, research, and reach out to potential community partners — faster and more effectively than manual research alone.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
