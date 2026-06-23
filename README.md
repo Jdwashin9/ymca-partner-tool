@@ -1,11 +1,11 @@
-# YMCA of Greater Charlotte — Partner Outreach Suite
-### Powered by Claude AI
+YMCA of Greater Charlotte — Partner Outreach Suite
+Powered by Claude AI
 
 An AI-powered community partner research and outreach tool built for the YMCA of Greater Charlotte. This project demonstrates how Claude can help nonprofit staff identify, research, and reach out to potential community partners — faster and more effectively than manual research alone.
 
 ---
 
-## 🎯 Why I Built This
+ Why I Built This
 
 During my internship at Bloomfield-Garfield Corporation in Pittsburgh, I manually researched 40+ organizations for their "First Friday" community event — identifying contacts, cataloging partner nonprofits, and drafting professional outreach emails. It was valuable work, but time-consuming.
 
@@ -15,28 +15,28 @@ I built this as part of my application for the **Anthropic Claude Corps Fellowsh
 
 ---
 
-## ✨ Features
+Features
 
-### 🔍 Organization Research Tab
+Organization Research Tab
 Type any nonprofit or community organization name and Claude instantly returns:
 - A summary of their mission and work
 - The right contact roles to reach out to
 - A concrete analysis of why they'd be a strong YMCA partner, referencing specific YMCA programs
 - A partnership strength rating (Strong / Moderate / Exploratory)
 
-### 📧 Outreach Email Generator Tab
+Outreach Email Generator Tab
 Fill in a few fields and Claude drafts a professional, warm partnership outreach email tailored to:
 - The organization type (food bank, faith community, healthcare org, etc.)
 - The partnership purpose (afterschool referrals, summer camp scholarships, event co-sponsorship, etc.)
 - Any additional context you provide
 - One-click copy to clipboard
 
-### 📋 Partner Catalog Tab
+Partner Catalog Tab
 Save researched organizations to a running catalog with their type, recommended contact, and partnership strength — building a structured partner pipeline as you work.
 
 ---
 
-## 🛠️ Tech Stack
+ Tech Stack
 
 | Layer | Technology |
 |---|---|
@@ -47,7 +47,7 @@ Save researched organizations to a running catalog with their type, recommended 
 
 ---
 
-## 🚀 Running Locally
+ Running Locally
 
 ### Prerequisites
 - [Node.js](https://nodejs.org/) (v18 or higher)
