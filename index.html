@@ -57,6 +57,8 @@
     .btn-secondary { background: var(--color-bg-secondary); color: var(--color-text-primary); border: 1px solid var(--color-border); }
     .btn-secondary:hover { background: var(--color-border-light); }
     .btn-full { width: 100%; justify-content: center; }
+    .btn-danger { background: var(--color-danger-bg); color: var(--color-danger); border: 1px solid var(--color-danger); }
+    .btn-danger:hover { background: #fee2e2; }
     .result-card { border: 1px solid var(--color-border); border-radius: var(--radius); padding: 1.25rem; margin-top: 1rem; }
     .result-title { font-size: 16px; font-weight: 600; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .result-type { font-size: 12px; color: var(--color-text-tertiary); margin-bottom: 12px; }
@@ -76,6 +78,7 @@
     .catalog-empty { text-align: center; padding: 2rem; color: var(--color-text-tertiary); font-size: 14px; }
     .catalog-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .catalog-header h2 { font-size: 15px; font-weight: 600; }
+    .catalog-actions { display: flex; gap: 8px; align-items: center; }
     .loading { display: none; align-items: center; gap: 8px; padding: 1rem 0; font-size: 14px; color: var(--color-text-secondary); }
     .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--color-accent); animation: pulse 1.2s ease-in-out infinite; }
     .dot:nth-child(2) { animation-delay: 0.2s; }
@@ -84,21 +87,22 @@
     .error { font-size: 13px; color: var(--color-danger); background: var(--color-danger-bg); padding: 10px 14px; border-radius: var(--radius-sm); margin-top: 10px; display: none; }
     .success-msg { font-size: 12px; color: var(--color-success); display: none; align-items: center; gap: 4px; }
     .count-pill { font-size: 11px; padding: 1px 7px; border-radius: 999px; background: var(--color-accent); color: white; margin-left: 6px; }
+    .saved-notice { font-size: 11px; color: var(--color-success); display: none; align-items: center; gap: 4px; margin-top: 6px; }
   </style>
 </head>
 <body>
 <div class="container">
 
   <div class="header">
-    <h1><i class="ti ti-building-community"></i> Partner Outreach Suite</h1>
+    <h1>Partner Outreach Suite</h1>
     <p>YMCA of Greater Charlotte &nbsp;·&nbsp; Powered by Claude AI</p>
   </div>
 
   <div class="card">
     <div class="tabs">
-      <button class="tab active" onclick="switchTab('research')"><i class="ti ti-search"></i> Research</button>
-      <button class="tab" onclick="switchTab('email')"><i class="ti ti-mail"></i> Draft Email</button>
-      <button class="tab" onclick="switchTab('catalog')"><i class="ti ti-list"></i> Catalog <span class="count-pill" id="tabCount">0</span></button>
+      <button class="tab active" onclick="switchTab('research')">Research</button>
+      <button class="tab" onclick="switchTab('email')">Draft Email</button>
+      <button class="tab" onclick="switchTab('catalog')">Catalog <span class="count-pill" id="tabCount">0</span></button>
     </div>
 
     <!-- RESEARCH TAB -->
@@ -107,7 +111,7 @@
         <label for="orgInput">Organization name</label>
         <div class="input-row">
           <input type="text" id="orgInput" placeholder="e.g. Second Harvest Food Bank of Metrolina" />
-          <button class="btn btn-primary" id="researchBtn" onclick="runResearch()"><i class="ti ti-search"></i> Research</button>
+          <button class="btn btn-primary" id="researchBtn" onclick="runResearch()">Research</button>
         </div>
       </div>
       <div class="loading" id="loadingResearch"><div class="dot"></div><div class="dot"></div><div class="dot"></div> Researching organization...</div>
@@ -158,7 +162,7 @@
         <label for="emailNotes">Extra context (optional)</label>
         <textarea id="emailNotes" placeholder="e.g. We met at a Charlotte Chamber event last month..."></textarea>
       </div>
-      <button class="btn btn-primary btn-full" id="emailBtn" onclick="runEmail()"><i class="ti ti-mail"></i> Generate outreach email</button>
+      <button class="btn btn-primary btn-full" id="emailBtn" onclick="runEmail()">Generate outreach email</button>
       <div class="loading" id="loadingEmail" style="margin-top:1rem;"><div class="dot"></div><div class="dot"></div><div class="dot"></div> Drafting your email...</div>
       <div class="error" id="errorEmail"></div>
       <div id="emailResult"></div>
@@ -168,10 +172,13 @@
     <div class="tab-panel" id="panel-catalog">
       <div class="catalog-header">
         <h2>Saved Partners</h2>
-        <span class="badge badge-exploratory" id="catalogCount">0 saved</span>
+        <div class="catalog-actions">
+          <span class="badge badge-exploratory" id="catalogCount">0 saved</span>
+          <button class="btn btn-danger" style="padding:4px 10px;font-size:12px;" onclick="clearCatalog()">Clear all</button>
+        </div>
       </div>
       <div id="catalogList">
-        <div class="catalog-empty"><i class="ti ti-bookmark" style="font-size:24px;display:block;margin-bottom:8px;"></i>No partners saved yet.<br>Research an org and click "Save to catalog".</div>
+        <div class="catalog-empty">No partners saved yet.<br>Research an org and click "Save to catalog".</div>
       </div>
     </div>
   </div>
@@ -179,10 +186,19 @@
 </div>
 
 <script>
-// ─── All API calls go to our local proxy server, not Anthropic directly ───
 const API_URL = "/api";
+const STORAGE_KEY = "ymca_partner_catalog";
 
-const catalog = [];
+// ── Load catalog from localStorage on page load ──────────────────────────────
+// This runs the moment the page opens and restores any previously saved orgs.
+const catalog = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+if (catalog.length > 0) renderCatalog();
+
+// ── Save catalog to localStorage ─────────────────────────────────────────────
+// Called every time the catalog changes so data is never lost.
+function saveCatalogToStorage() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(catalog));
+}
 
 function switchTab(name) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
@@ -193,8 +209,6 @@ function switchTab(name) {
 }
 
 async function callClaude(prompt) {
-  // Instead of calling Anthropic directly (which causes CORS errors),
-  // we call our local server.js which forwards the request safely.
   const response = await fetch(API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -246,10 +260,10 @@ partnershipStrength must be exactly one of: "Strong", "Moderate", or "Explorator
 
 function renderResult(r) {
   const badgeClass = r.partnershipStrength === 'Strong' ? 'badge-strong' : r.partnershipStrength === 'Moderate' ? 'badge-moderate' : 'badge-exploratory';
+  const alreadySaved = catalog.find(o => o.name === r.name);
   document.getElementById('resultArea').innerHTML = `
     <div class="result-card">
       <div class="result-title">
-        <i class="ti ti-building" style="color:#6b7280;"></i>
         ${r.name}
         <span class="badge ${badgeClass}">${r.partnershipStrength} fit</span>
       </div>
@@ -261,13 +275,14 @@ function renderResult(r) {
       <div class="section-label">YMCA partnership angle</div>
       <div class="section-text">${r.partnershipAngle}</div>
       <div class="action-row">
-        <button class="btn btn-secondary" onclick='saveToCatalog(${JSON.stringify(r).replace(/'/g,"&#39;")})'>
-          <i class="ti ti-bookmark"></i> Save to catalog
+        <button class="btn btn-secondary" id="saveBtn" onclick='saveToCatalog(${JSON.stringify(r).replace(/'/g,"&#39;")})' ${alreadySaved ? 'disabled' : ''}>
+          ${alreadySaved ? 'Already saved' : 'Save to catalog'}
         </button>
         <button class="btn btn-secondary" onclick='prefillEmail(${JSON.stringify(r).replace(/'/g,"&#39;")})'>
-          <i class="ti ti-mail"></i> Draft email
+          Draft email
         </button>
       </div>
+      <div class="saved-notice" id="savedNotice">Saved to catalog</div>
     </div>`;
 }
 
@@ -330,9 +345,9 @@ function renderEmail(e) {
       <div class="email-body">${e.body}</div>
       <div class="action-row">
         <button class="btn btn-secondary" onclick="copyEmail(\`Subject: ${e.subject.replace(/`/g,'\\`')}\n\n${e.body.replace(/`/g,'\\`')}\`)">
-          <i class="ti ti-copy"></i> Copy email
+          Copy email
         </button>
-        <span class="success-msg" id="copiedMsg"><i class="ti ti-check"></i> Copied!</span>
+        <span class="success-msg" id="copiedMsg">Copied!</span>
       </div>
     </div>`;
 }
@@ -348,6 +363,20 @@ function copyEmail(text) {
 function saveToCatalog(org) {
   if (catalog.find(o => o.name === org.name)) return;
   catalog.push(org);
+  saveCatalogToStorage(); // persist to localStorage
+  renderCatalog();
+
+  // Update the save button to show confirmation
+  const btn = document.getElementById('saveBtn');
+  const notice = document.getElementById('savedNotice');
+  if (btn) { btn.disabled = true; btn.textContent = 'Already saved'; }
+  if (notice) { notice.style.display = 'flex'; }
+}
+
+function clearCatalog() {
+  if (!confirm("Are you sure you want to clear all saved partners? This cannot be undone.")) return;
+  catalog.length = 0;
+  saveCatalogToStorage(); // clear localStorage too
   renderCatalog();
 }
 
@@ -356,10 +385,10 @@ function renderCatalog() {
   document.getElementById('catalogCount').textContent = count + ' saved';
   document.getElementById('tabCount').textContent = count;
   if (count === 0) {
-    document.getElementById('catalogList').innerHTML = '<div class="catalog-empty">No partners saved yet.</div>';
+    document.getElementById('catalogList').innerHTML = '<div class="catalog-empty">No partners saved yet.<br>Research an org and click "Save to catalog".</div>';
     return;
   }
-  document.getElementById('catalogList').innerHTML = catalog.map(o => {
+  document.getElementById('catalogList').innerHTML = catalog.map((o, i) => {
     const bc = o.partnershipStrength === 'Strong' ? 'badge-strong' : o.partnershipStrength === 'Moderate' ? 'badge-moderate' : 'badge-exploratory';
     return `<div class="catalog-item">
       <div>
@@ -369,11 +398,20 @@ function renderCatalog() {
       <div style="display:flex;align-items:center;gap:8px;">
         <span class="badge ${bc}">${o.partnershipStrength}</span>
         <button class="btn btn-secondary" style="padding:5px 10px;font-size:12px;" onclick='prefillEmail(${JSON.stringify(o).replace(/'/g,"&#39;")})'>
-          <i class="ti ti-mail"></i>
+          Email
+        </button>
+        <button class="btn btn-danger" style="padding:5px 10px;font-size:12px;" onclick="removeFromCatalog(${i})">
+          Remove
         </button>
       </div>
     </div>`;
   }).join('');
+}
+
+function removeFromCatalog(index) {
+  catalog.splice(index, 1);
+  saveCatalogToStorage(); // update localStorage after removal
+  renderCatalog();
 }
 
 document.getElementById('orgInput').addEventListener('keydown', e => { if (e.key === 'Enter') runResearch(); });
